@@ -4,7 +4,9 @@
       <v-toolbar-title>Music akinator</v-toolbar-title>
     </v-app-bar>
 
-    <v-content> </v-content>
+    <v-content class="d-flex justify-center align-center">
+      <game-window></game-window>
+    </v-content>
     <v-footer color="blue-grey" app>
       <span class="white--text">&copy; BornedToCode 2020</span>
     </v-footer>
@@ -12,7 +14,12 @@
 </template>
 
 <script>
+import GameWindow from "../components/Game/GameWindow";
+
 export default {
-  data: () => ({})
+  data: () => ({}),
+  components: {
+    "game-window": GameWindow
+  }
 };
 </script>
