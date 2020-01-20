@@ -18,8 +18,8 @@ export default {
     mutateResult(state, { payLoad }) {
       state.result = payLoad;
     },
-    mutateAttemptNumber(state) {
-      state.result += 1;
+    mutateAttemptNumber(state, { payLoad }) {
+      state.attemptNumber = payLoad;
     }
   },
   actions: {
@@ -27,7 +27,11 @@ export default {
       store.commit("mutateResult", { payLoad });
     },
     increaseAttemptNumber(store) {
-      store.commit("mutateAttemptNumber");
+      const payLoad = store.state.attemptNumber + 1;
+      store.commit("mutateAttemptNumber", { payLoad });
+    },
+    resetAttemptNumber(store) {
+      store.commit("mutateAttemptNumber", { payLoad: 1 });
     }
   }
 };
