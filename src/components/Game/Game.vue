@@ -48,7 +48,7 @@
           :x-large="true"
           ><v-icon>mdi-play</v-icon></v-btn
         >
-        <v-btn text icon color="red" :x-large="true"
+        <v-btn text icon color="red" :x-large="true" @click="nextAttemt()"
           ><v-icon>mdi-close</v-icon></v-btn
         >
       </div>
@@ -94,13 +94,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["name", "attemptNumber"]),
+    ...mapGetters(["name", "attemptNumber", "isGameOver"]),
     answerIndex() {
       return this.attemptNumber - 1;
     }
   },
   methods: {
-    ...mapActions(["changeResult", "increaseStep"]),
+    ...mapActions([
+      "changeResult",
+      "increaseStep",
+      "increaseAttemptNumber",
+      "resetAttemptNumber"
+    ]),
     async getAnswers({ lyrics }) {
       lyrics = this.removeLinebreaks({ str: lyrics });
       const response = await this.searchEngine.findSongByLyrics({ lyrics });
@@ -142,9 +147,14 @@ export default {
       }
       return title;
     },
+    nextAttemt() {
+      this.increaseAttemptNumber();
+      this.isGameOver ? this.endGame({ result: "defeat" }) : this.setTrackId();
+    },
     endGame({ result }) {
       this.changeResult({ payLoad: result });
       this.increaseStep();
+      this.resetAttemptNumber();
     }
   }
 };
