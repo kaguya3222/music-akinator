@@ -76,6 +76,21 @@
         </div>
       </v-expand-transition>
     </div>
+
+    <v-dialog v-model="isAnswersEmpty" max-width="620">
+      <v-card class="py-3 px-3">
+        <p>
+          Упс... Я даже представить не могу что это... Может ты напишешь
+          поточнее?
+        </p>
+
+        <div class="full-width d-flex justify-center align-center">
+          <v-btn color="green" @click="isAnswersEmpty = false"
+            >Я попробую</v-btn
+          >
+        </div>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -93,6 +108,11 @@ export default {
       listen: false,
       trackId: null,
       answers: [],
+      isAnswersEmpty: false,
+      isReceived: {
+        status: false,
+        payLoad: null
+      },
       searchEngine: new API({
         songSearchEngineURL: `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`,
         token: "3761f8927138dfaeffedf249d2d8b590"
@@ -120,7 +140,9 @@ export default {
     }
   },
   validations: {
-    lyrics: { required }
+    lyrics: {
+      required
+    }
   },
   methods: {
     ...mapActions([
@@ -137,9 +159,9 @@ export default {
     async getAnswers({ lyrics }) {
       lyrics = this.removeLinebreaks({ str: lyrics });
       const response = await this.searchEngine.findSongByLyrics({ lyrics });
+      this.receive({ response });
       if (response.data.result.length === 0) {
-        console.log("error");
-        return true;
+        return false;
       }
       this.setAnswers({ response });
       this.setTrackId();
@@ -209,12 +231,26 @@ export default {
     setAttemptsQuantity() {
       if (this.answers.length < 5)
         this.changeAttemptsQuantity({ payLoad: this.answers.length });
+    },
+    receive({ response }) {
+      this.isReceived.status = true;
+      this.isReceived.payLoad = JSON.parse(JSON.stringify(response));
     }
   },
   mounted() {
     this.resetSuggestedAnswers();
   },
-  mixins: [validationHelpers, validationMixin]
+  mixins: [validationHelpers, validationMixin],
+  watch: {
+    isReceived: {
+      handler(value) {
+        const resultOfRequest = value.payLoad.data.result;
+        if (resultOfRequest.length === 0)
+          this.isAnswersEmpty = this.answers.length === 0 ? true : false;
+      },
+      deep: true
+    }
+  }
 };
 </script>
 
