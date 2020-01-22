@@ -10,7 +10,7 @@
         <p v-if="result === 'victory' || sentRightAnswer">
           Правильный ответ: {{ rightAnswer.artist }} - {{ rightAnswer.title }}
         </p>
-        <div
+        <v-form
           v-else
           class="full-width d-flex flex-column justify-center align-center"
         >
@@ -27,7 +27,9 @@
               color="blue-grey"
               label="Исполнитель"
               class="input-width mt-2"
-              v-model="userRightAnswer.artist"
+              v-model="$v.userRightAnswer.artist.$model"
+              :error-messages="artistErrors"
+              :success="!this.$v.userRightAnswer.artist.$invalid"
             ></v-text-field>
             <v-text-field
               type="text"
@@ -35,16 +37,30 @@
               color="blue-grey"
               label="Название"
               class="input-width mt-2"
-              v-model="userRightAnswer.title"
+              v-model="$v.userRightAnswer.title.$model"
+              :error-messages="titleErrors"
+              :success="!this.$v.userRightAnswer.title.$invalid"
             ></v-text-field>
-            <v-btn text icon color="blue-grey" @click="sendRightAnswer()"
+            <v-btn
+              text
+              icon
+              color="blue-grey"
+              @click="sendRightAnswer()"
+              class="mt-2"
+              :disabled="isDisabled"
               >Ответить</v-btn
             >
           </div>
-        </div>
+        </v-form>
       </div>
       <div class="d-flex justify-center align-center full-width">
-        <v-btn text icon color="blue-grey" :x-large="true" @click="replay()"
+        <v-btn
+          text
+          icon
+          color="blue-grey"
+          :x-large="true"
+          @click="replay()"
+          v-if="!isDisabled"
           ><v-icon>mdi-replay</v-icon></v-btn
         >
         <v-btn
@@ -55,7 +71,13 @@
           @click="showList = !showList"
           ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
         >
-        <v-btn text icon color="blue-grey" :x-large="true" @click="exit()"
+        <v-btn
+          text
+          icon
+          color="blue-grey"
+          :x-large="true"
+          @click="exit()"
+          v-if="!isDisabled"
           ><v-icon>mdi-exit-to-app</v-icon></v-btn
         >
       </div>
@@ -84,6 +106,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import validationHelpers from "../../mixins/validationHelpers";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
@@ -104,6 +130,37 @@ export default {
     },
     winner() {
       return this.result === "victory" ? "Akinator" : this.name;
+    },
+    titleErrors() {
+      let errors = [];
+      if (!this.$v.userRightAnswer.title.$dirty) return errors;
+      errors = this.checkIfErrorShouldAppend({
+        field: this.$v.userRightAnswer.title,
+        errors,
+        errorMessage: "Это поле обязательно!",
+        errorType: "required"
+      });
+      return errors;
+    },
+    artistErrors() {
+      let errors = [];
+      if (!this.$v.userRightAnswer.artist.$dirty) return errors;
+      errors = this.checkIfErrorShouldAppend({
+        field: this.$v.userRightAnswer.artist,
+        errors,
+        errorMessage: "Это поле обязательно!",
+        errorType: "required"
+      });
+      return errors;
+    },
+    isDisabled() {
+      return this.$v.$invalid;
+    }
+  },
+  validations: {
+    userRightAnswer: {
+      artist: { required },
+      title: { required }
     }
   },
   methods: {
@@ -118,6 +175,7 @@ export default {
       this.sentRightAnswer = true;
       this.setRightAnswer({ payLoad: this.userRightAnswer });
     }
-  }
+  },
+  mixins: [validationHelpers, validationMixin]
 };
 </script>
