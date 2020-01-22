@@ -14,13 +14,17 @@
         color="blue-grey"
         label="Строчки из песни"
         :auto-grow="true"
-        v-model.trim="lyrics"
+        v-model.trim="$v.lyrics.$model"
+        :error-messages="lyricsErrors"
+        :success="!$v.lyrics.$invalid"
       ></v-textarea>
       <v-btn
+        class="mt-2"
         @click="getAnswers({ lyrics })"
         color="blue-grey"
         :max-width="100"
-        dark
+        :dark="!isDisabled"
+        :disabled="isDisabled"
         >Загадать</v-btn
       >
     </div>
@@ -78,6 +82,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import API from "../../backend-api";
+import validationHelpers from "../../mixins/validationHelpers";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
@@ -95,7 +103,24 @@ export default {
     ...mapGetters(["name", "attemptNumber", "isGameOver"]),
     answerIndex() {
       return this.attemptNumber - 1;
+    },
+    lyricsErrors() {
+      let errors = [];
+      if (!this.$v.lyrics.$dirty) return errors;
+      errors = this.checkIfErrorShouldAppend({
+        field: this.$v.lyrics,
+        errors,
+        errorMessage: "Это поле обязательно!",
+        errorType: "required"
+      });
+      return errors;
+    },
+    isDisabled() {
+      return this.$v.$invalid;
     }
+  },
+  validations: {
+    lyrics: { required }
   },
   methods: {
     ...mapActions([
@@ -188,7 +213,8 @@ export default {
   },
   mounted() {
     this.resetSuggestedAnswers();
-  }
+  },
+  mixins: [validationHelpers, validationMixin]
 };
 </script>
 
