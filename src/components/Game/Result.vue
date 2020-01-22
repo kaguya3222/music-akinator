@@ -60,7 +60,7 @@
           color="blue-grey"
           :x-large="true"
           @click="replay()"
-          v-if="!isDisabled"
+          v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
           ><v-icon>mdi-replay</v-icon></v-btn
         >
         <v-btn
@@ -77,7 +77,7 @@
           color="blue-grey"
           :x-large="true"
           @click="exit()"
-          v-if="!isDisabled"
+          v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
           ><v-icon>mdi-exit-to-app</v-icon></v-btn
         >
       </div>
