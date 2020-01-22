@@ -1,5 +1,5 @@
 <template>
-  <v-card class="d-flex flex-column align-center game-card px-2 py-2">
+  <v-card class="d-flex flex-column align-center game-card px-2 py-2 mx-10">
     <div class="d-flex full-width">
       <span>{{ name }}</span>
       <span class="ml-auto">Попытка {{ attemptNumber }}</span>
@@ -68,8 +68,8 @@
               :src="
                 `https://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=250&height=350&color=ff0000&layout=dark&size=medium&type=tracks&id=${this.trackId}&app_id=1`
               "
-              width="350"
               height="65"
+              width="250"
             ></iframe>
             <span v-if="!trackId">Упс... Этого трека нет на Deezer :(</span>
           </div>
