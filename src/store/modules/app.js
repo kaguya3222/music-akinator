@@ -12,8 +12,8 @@ export default {
     }
   },
   mutations: {
-    mutateStep(state) {
-      state.step += 1;
+    mutateStep(state, { payLoad }) {
+      state.step = payLoad;
     },
     mutateName(state, { payLoad }) {
       state.name = payLoad;
@@ -21,10 +21,14 @@ export default {
   },
   actions: {
     increaseStep(store) {
-      store.commit("mutateStep");
+      const payLoad = store.state.step + 1;
+      store.commit("mutateStep", { payLoad });
     },
     changeName(store, { payLoad }) {
       store.commit("mutateName", { payLoad });
+    },
+    changeStep(store, { payLoad }) {
+      store.commit("mutateStep", { payLoad });
     }
   }
 };
