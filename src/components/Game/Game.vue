@@ -115,7 +115,7 @@ export default {
       },
       searchEngine: new API({
         songSearchEngineURL: `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`,
-        token: "3761f8927138dfaeffedf249d2d8b590"
+        token: "6586db1d822b505cc809c62c9c27febb"
       })
     };
   },
