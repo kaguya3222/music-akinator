@@ -3,6 +3,7 @@
     <name v-if="step === 1"></name>
     <game v-if="step === 2"></game>
     <result v-if="step === 3"></result>
+    <session-result v-if="step === 4"></session-result>
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import Name from "./Name";
 import Game from "./Game";
 import Result from "./Result";
+import SessionResult from "./SessionResult";
 
 import { mapGetters } from "vuex";
 
@@ -23,7 +25,8 @@ export default {
   components: {
     name: Name,
     game: Game,
-    result: Result
+    result: Result,
+    "session-result": SessionResult
   },
   methods: {}
 };
