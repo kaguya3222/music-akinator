@@ -77,9 +77,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
 import API from "../../backend-api";
-
 export default {
   data() {
     return {
@@ -104,7 +102,12 @@ export default {
       "changeResult",
       "increaseStep",
       "increaseAttemptNumber",
-      "resetAttemptNumber"
+      "resetAttemptNumber",
+      "setRightAnswer",
+      "changeSuggestedAnswers",
+      "resetSuggestedAnswers",
+      "increasePoints",
+      "changeAttemptsQuantity"
     ]),
     async getAnswers({ lyrics }) {
       lyrics = this.removeLinebreaks({ str: lyrics });
@@ -135,8 +138,15 @@ export default {
     setAnswers({ response }) {
       response.data.result.map(el => {
         el.title = this.parseRussianTitle({ title: el.title }).trim();
-        this.answers.push(el);
+        this.answers.push({
+          artist: el.artist,
+          title: el.title
+        });
       });
+      this.answers = this.removeDuplicates({ array: this.answers });
+      console.log(this.answers);
+      if (this.answers.length < 5)
+        this.changeAttemptsQuantity({ payLoad: this.answers.length });
     },
     removeLinebreaks({ str }) {
       return str.replace(/[\r\n]+/gm, " ");
@@ -148,14 +158,34 @@ export default {
       return title;
     },
     nextAttemt() {
+      this.changeSuggestedAnswers({ payLoad: this.answers[this.answerIndex] });
       this.increaseAttemptNumber();
       this.isGameOver ? this.endGame({ result: "defeat" }) : this.setTrackId();
     },
     endGame({ result }) {
+      if (result === "victory") {
+        this.changeSuggestedAnswers({
+          payLoad: this.answers[this.answerIndex]
+        });
+        this.setRightAnswer({
+          payLoad: {
+            artist: this.answers[this.answerIndex].artist,
+            title: this.answers[this.answerIndex].title
+          }
+        });
+      } else {
+        this.increasePoints();
+      }
       this.changeResult({ payLoad: result });
       this.increaseStep();
       this.resetAttemptNumber();
+    },
+    removeDuplicates({ array }) {
+      return Array.from(new Set(array.map(JSON.stringify))).map(JSON.parse);
     }
+  },
+  mounted() {
+    this.resetSuggestedAnswers();
   }
 };
 </script>
@@ -163,16 +193,5 @@ export default {
 <style lang="scss" scoped>
 .game-card {
   min-width: 300px;
-}
-.bordered {
-  border: 1px solid black;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.input-width {
-  width: 250px;
 }
 </style>
