@@ -144,9 +144,7 @@ export default {
         });
       });
       this.answers = this.removeDuplicates({ array: this.answers });
-      console.log(this.answers);
-      if (this.answers.length < 5)
-        this.changeAttemptsQuantity({ payLoad: this.answers.length });
+      this.setAttemptsQuantity();
     },
     removeLinebreaks({ str }) {
       return str.replace(/[\r\n]+/gm, " ");
@@ -182,6 +180,10 @@ export default {
     },
     removeDuplicates({ array }) {
       return Array.from(new Set(array.map(JSON.stringify))).map(JSON.parse);
+    },
+    setAttemptsQuantity() {
+      if (this.answers.length < 5)
+        this.changeAttemptsQuantity({ payLoad: this.answers.length });
     }
   },
   mounted() {
