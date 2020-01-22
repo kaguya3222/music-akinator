@@ -14,7 +14,7 @@ export default class API {
 
   async findTrackId({ artist, title }) {
     return await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=artist:"${artist}" track:"${title}"`
+      `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=artist:"${artist}" title:"${title}"`
     );
   }
 }
