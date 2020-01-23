@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import Name from "./Name";
+import Name from "./GameName";
 import Game from "./Game";
-import Result from "./Result";
-import SessionResult from "./SessionResult";
+import Result from "./GameResult";
+import SessionResult from "./GameSessionResult";
 
 import { mapGetters } from "vuex";
 
