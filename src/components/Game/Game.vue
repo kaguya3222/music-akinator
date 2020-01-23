@@ -1,15 +1,15 @@
 <template>
   <v-card class="d-flex flex-column align-center game-card px-2 py-2 mx-10">
-    <div class="d-flex full-width">
-      <span>{{ name }}</span>
-      <span class="ml-auto">Попытка {{ attemptNumber }}</span>
-    </div>
+    <game-attempt-number></game-attempt-number>
+
+    <game-lyrics-input v-if="!answers.length"></game-lyrics-input>
 
     <div
       v-if="!answers.length"
       class="d-flex flex-column full-width align-center"
     >
       <v-textarea
+        v-if="lyricsInputType === 'keyboard'"
         class="input-width mt-2"
         color="blue-grey"
         label="Строчки из песни"
@@ -18,13 +18,52 @@
         :error-messages="lyricsErrors"
         :success="!$v.lyrics.$invalid"
       ></v-textarea>
+
+      <div
+        v-if="lyricsInputType === 'micro'"
+        class="full-width d-flex flex-column align-center"
+      >
+        <div class="d-flex flex-column align-center">
+          <span>Выберите язык ввода:</span>
+          <v-radio-group class="d-flex flex-column" v-if="!isSpeechLangChosen">
+            <v-radio
+              v-for="(language, index) in languages"
+              @change="changeSpeechLang({ payLoad: language.value })"
+              :key="index"
+              :label="language.label"
+              :value="language.value"
+            ></v-radio>
+            <v-btn
+              class="align-self-center"
+              text
+              icon
+              color="green"
+              v-show="speechLang"
+              @click="chooseLanguage()"
+              ><v-icon>mdi-check</v-icon></v-btn
+            >
+          </v-radio-group>
+        </div>
+        <div
+          v-show="this.lyrics"
+          class="d-flex flex-column align-center"
+          v-if="isSpeechLangChosen"
+        >
+          <p>Вы напели:</p>
+          <p>{{ this.lyrics }}</p>
+          <v-btn @click="listenMicro()" color="blue-grey" dark text
+            >Напеть еще раз</v-btn
+          >
+        </div>
+      </div>
+
       <v-btn
         class="mt-2"
+        v-show="this.lyrics"
         @click="getAnswers({ lyrics })"
         color="blue-grey"
         :max-width="100"
-        :dark="!isDisabled"
-        :disabled="isDisabled"
+        dark
         >Загадать</v-btn
       >
     </div>
@@ -36,25 +75,48 @@
         {{ answers[answerIndex].title }}</span
       >
       <div class="full-width d-flex justify-center">
-        <v-btn
-          text
-          icon
-          color="green"
-          :x-large="true"
-          @click="endGame({ result: 'victory' })"
-          ><v-icon>mdi-check</v-icon></v-btn
-        >
-        <v-btn
-          text
-          icon
-          @click="listen = !listen"
-          color="blue-grey"
-          :x-large="true"
-          ><v-icon>mdi-play</v-icon></v-btn
-        >
-        <v-btn text icon color="red" :x-large="true" @click="nextAttemt()"
-          ><v-icon>mdi-close</v-icon></v-btn
-        >
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              icon
+              color="green"
+              :x-large="true"
+              v-on="on"
+              @click="endGame({ result: 'victory' })"
+              ><v-icon>mdi-check</v-icon></v-btn
+            >
+          </template>
+          <span>Верно</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              icon
+              color="blue-grey"
+              :x-large="true"
+              @click="listen = !listen"
+              v-on="on"
+              ><v-icon>mdi-play</v-icon></v-btn
+            >
+          </template>
+          <span>Прослушать</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              icon
+              color="red"
+              :x-large="true"
+              v-on="on"
+              @click="nextAttemt()"
+              ><v-icon>mdi-close</v-icon></v-btn
+            >
+          </template>
+          <span>Неверно</span>
+        </v-tooltip>
       </div>
       <v-expand-transition>
         <div v-show="listen" class="mt-3">
@@ -77,7 +139,7 @@
       </v-expand-transition>
     </div>
 
-    <v-dialog v-model="isAnswersEmpty" max-width="620">
+    <v-dialog v-model="areAnswersEmpty" max-width="620">
       <v-card class="py-3 px-3">
         <p>
           Упс... Я даже представить не могу что это... Может ты напишешь
@@ -85,7 +147,7 @@
         </p>
 
         <div class="full-width d-flex justify-center align-center">
-          <v-btn color="green" @click="isAnswersEmpty = false"
+          <v-btn color="green" @click="areAnswersEmpty = false"
             >Я попробую</v-btn
           >
         </div>
@@ -101,6 +163,9 @@ import validationHelpers from "../../mixins/validationHelpers";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 
+import GameLyricsInput from "./GameLyricsInput";
+import GameAttemptNumber from "./GameAttemptNumber";
+
 export default {
   data() {
     return {
@@ -108,19 +173,28 @@ export default {
       listen: false,
       trackId: null,
       answers: [],
-      isAnswersEmpty: false,
-      isReceived: {
+      areAnswersEmpty: false,
+      isResponseReceived: {
         status: false,
         payLoad: null
       },
       searchEngine: new API({
         songSearchEngineURL: `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`,
         token: "6586db1d822b505cc809c62c9c27febb"
-      })
+      }),
+      recognitionEngine: null
     };
   },
   computed: {
-    ...mapGetters(["name", "attemptNumber", "isGameOver"]),
+    ...mapGetters([
+      "name",
+      "attemptNumber",
+      "isGameOver",
+      "lyricsInputType",
+      "speechLang",
+      "isSpeechLangChosen",
+      "languages"
+    ]),
     answerIndex() {
       return this.attemptNumber - 1;
     },
@@ -134,9 +208,6 @@ export default {
         errorType: "required"
       });
       return errors;
-    },
-    isDisabled() {
-      return this.$v.$invalid;
     }
   },
   validations: {
@@ -154,7 +225,9 @@ export default {
       "changeSuggestedAnswers",
       "resetSuggestedAnswers",
       "increasePoints",
-      "changeAttemptsQuantity"
+      "changeAttemptsQuantity",
+      "changeSpeechLang",
+      "chooseLanguage"
     ]),
     async getAnswers({ lyrics }) {
       lyrics = this.removeLinebreaks({ str: lyrics });
@@ -233,23 +306,57 @@ export default {
         this.changeAttemptsQuantity({ payLoad: this.answers.length });
     },
     receive({ response }) {
-      this.isReceived.status = true;
-      this.isReceived.payLoad = JSON.parse(JSON.stringify(response));
+      this.isResponseReceived.status = true;
+      this.isResponseReceived.payLoad = JSON.parse(JSON.stringify(response));
+    },
+    listenMicro() {
+      this.recognitionEngine.interimResults = true;
+      this.recognitionEngine.lang = this.speechLang;
+      this.recognitionEngine.addEventListener("result", e => {
+        this.lyrics = e.results[0][0].transcript;
+      });
+      this.recognitionEngine.start();
     }
   },
   mounted() {
+    window.SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    this.recognitionEngine = new window.SpeechRecognition();
     this.resetSuggestedAnswers();
+  },
+  destroyed() {
+    this.$store.dispatch("resetSpeechLanguage");
+    this.$store.dispatch("resetInputType");
   },
   mixins: [validationHelpers, validationMixin],
   watch: {
-    isReceived: {
+    isResponseReceived: {
       handler(value) {
         const resultOfRequest = value.payLoad.data.result;
         if (resultOfRequest.length === 0)
-          this.isAnswersEmpty = this.answers.length === 0 ? true : false;
+          this.areAnswersEmpty = this.answers.length === 0 ? true : false;
       },
       deep: true
+    },
+    lyricsInputType: {
+      handler() {
+        this.lyrics = "";
+        this.$store.dispatch("resetSpeechLanguage");
+        this.recognitionEngine.addEventListener("end", () => {
+          if (this.lyricsInputType === "keyboard") this.lyrics = "";
+        });
+      }
+    },
+    isSpeechLangChosen: {
+      handler() {
+        if (this.lyricsInputType === "micro") this.listenMicro();
+      }
     }
+  },
+  components: {
+    "game-lyrics-input": GameLyricsInput,
+    "game-attempt-number": GameAttemptNumber
   }
 };
 </script>
