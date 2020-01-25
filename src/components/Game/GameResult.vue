@@ -54,32 +54,52 @@
         </v-form>
       </div>
       <div class="d-flex justify-center align-center full-width">
-        <v-btn
-          text
-          icon
-          color="blue-grey"
-          :x-large="true"
-          @click="replay()"
-          v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
-          ><v-icon>mdi-replay</v-icon></v-btn
-        >
-        <v-btn
-          text
-          icon
-          color="blue-grey"
-          :x-large="true"
-          @click="showList = !showList"
-          ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
-        >
-        <v-btn
-          text
-          icon
-          color="blue-grey"
-          :x-large="true"
-          @click="exit()"
-          v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
-          ><v-icon>mdi-exit-to-app</v-icon></v-btn
-        >
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }"
+            ><v-btn
+              text
+              icon
+              color="blue-grey"
+              :x-large="true"
+              @click="replay()"
+              v-on="on"
+              v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
+              ><v-icon>mdi-replay</v-icon></v-btn
+            >
+          </template>
+          <span>Играть повторно</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              icon
+              color="blue-grey"
+              :x-large="true"
+              v-on="on"
+              @click="showList = !showList"
+              ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
+            >
+          </template>
+          <span>Просмотреть список ответов</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              text
+              icon
+              color="blue-grey"
+              :x-large="true"
+              @click="exit()"
+              v-on="on"
+              v-show="(!isDisabled && sentRightAnswer) || result === 'victory'"
+              ><v-icon>mdi-exit-to-app</v-icon></v-btn
+            >
+          </template>
+          <span>Выйти в главное меню</span>
+        </v-tooltip>
       </div>
       <v-expand-transition>
         <div v-show="showList">

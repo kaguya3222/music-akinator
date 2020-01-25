@@ -33,15 +33,21 @@
               :label="language.label"
               :value="language.value"
             ></v-radio>
-            <v-btn
-              class="align-self-center"
-              text
-              icon
-              color="green"
-              v-show="speechLang"
-              @click="chooseLanguage()"
-              ><v-icon>mdi-check</v-icon></v-btn
-            >
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }"
+                ><v-btn
+                  class="align-self-center"
+                  text
+                  icon
+                  color="green"
+                  v-show="speechLang"
+                  v-on="on"
+                  @click="chooseLanguage()"
+                  ><v-icon>mdi-check</v-icon></v-btn
+                >
+              </template>
+              <span>Подтвердить</span>
+            </v-tooltip>
           </v-radio-group>
         </div>
         <div
