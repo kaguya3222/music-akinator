@@ -1,6 +1,6 @@
 # music-akinator
 
-## Для установки и запуска приложения локально
+### Для установки и запуска приложения локально
 ```
   1. Установить NodeJs https://nodejs.org/uk/
   2. Установить Git https://git-scm.com/downloads
@@ -9,10 +9,10 @@
   5. Прописать команду cd music-akinator
   6. Прописать команду npm install и подождать
   7. Прописать команду npm run serve и запустить localhost с портом, который укажет терминал.
-  
-  Ссылка на [глобальный доступ](https://music-akinator-int20h.herokuapp.com/)
-
 ```
+
+### Heroku 
+Ссылка на [глобальный доступ](https://music-akinator-int20h.herokuapp.com/)
 
 ## Project setup
 ```
