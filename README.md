@@ -10,7 +10,7 @@
   6. Прописать команду npm install и подождать
   7. Прописать команду npm run serve и запустить localhost с портом, который укажет терминал.
   
-  Ссылка на глобальный доступ - https://music-akinator-int20h.herokuapp.com/
+  Ссылка на [глобальный доступ](https://music-akinator-int20h.herokuapp.com/)
 
 ```
 
