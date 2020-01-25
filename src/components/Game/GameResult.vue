@@ -166,6 +166,7 @@ export default {
   methods: {
     ...mapActions(["setRightAnswer"]),
     replay() {
+      this.$store.dispatch("setAnswers", { payLoad: [] });
       this.$store.dispatch("changeStep", { payLoad: 2 });
     },
     exit() {
