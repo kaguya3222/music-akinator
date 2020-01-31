@@ -5,9 +5,6 @@
     <game-lyrics-input></game-lyrics-input>
 
     <game-answer></game-answer>
-    <v-expand-transition v-if="answers.length">
-      <game-music-player></game-music-player>
-    </v-expand-transition>
   </v-card>
 </template>
 
@@ -17,7 +14,6 @@ import { mapGetters, mapActions } from "vuex";
 import GameLyricsInput from "./GameLyricsInput";
 import GameAttemptNumber from "./GameAttemptNumber";
 import GameAnswer from "./GameAnswer";
-import GameMusicPlayer from "./GameMusicPlayer";
 
 export default {
   data() {
@@ -41,8 +37,7 @@ export default {
   components: {
     "game-lyrics-input": GameLyricsInput,
     "game-attempt-number": GameAttemptNumber,
-    "game-answer": GameAnswer,
-    "game-music-player": GameMusicPlayer
+    "game-answer": GameAnswer
   }
 };
 </script>
