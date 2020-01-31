@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import API from "../../backend-api";
+import API from "../../../backend-api";
 
 import { mapGetters } from "vuex";
 
@@ -27,10 +27,7 @@ export default {
   data() {
     return {
       trackId: null,
-      searchEngine: new API({
-        songSearchEngineURL: `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`,
-        token: "6586db1d822b505cc809c62c9c27febb"
-      })
+      searchEngine: new API()
     };
   },
   computed: {
