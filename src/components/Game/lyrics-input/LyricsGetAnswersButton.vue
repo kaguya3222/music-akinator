@@ -21,10 +21,7 @@ import parsingHelpers from "../../../mixins/parsingHelpers";
 export default {
   data() {
     return {
-      searchEngine: new API({
-        songSearchEngineURL: `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`,
-        token: "6586db1d822b505cc809c62c9c27febb"
-      })
+      searchEngine: new API()
     };
   },
   computed: {
