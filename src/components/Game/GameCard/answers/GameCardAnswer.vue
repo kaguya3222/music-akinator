@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import AnswerTackName from "./answers/AnswerTrackName";
-import AnswerButtons from "./answers/AnswerButtons";
-import AnswerMusicPlayer from "./answers/AnswerMusicPlayer";
+import AnswerTackName from "./AnswerTrackName";
+import AnswerButtons from "./AnswerButtons";
+import AnswerMusicPlayer from "./AnswerMusicPlayer";
 import { mapGetters } from "vuex";
 
 export default {

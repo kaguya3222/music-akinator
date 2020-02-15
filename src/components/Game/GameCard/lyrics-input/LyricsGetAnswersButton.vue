@@ -14,9 +14,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import API from "../../../backend-api";
+import API from "../../../../backend-api";
 
-import parsingHelpers from "../../../mixins/parsingHelpers";
+import parsingHelpers from "../../../../mixins/parsingHelpers";
 
 export default {
   data() {

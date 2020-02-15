@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import API from "../../../backend-api";
+import API from "../../../../backend-api";
 
 import { mapGetters } from "vuex";
 

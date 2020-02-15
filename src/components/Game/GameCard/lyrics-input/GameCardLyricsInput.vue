@@ -11,11 +11,11 @@
 <script>
 import { mapGetters } from "vuex";
 
-import LyricsInputOptions from "./lyrics-input/LyricsInputOptions";
-import LyricsTextFieldInput from "./lyrics-input/LyricsTextFieldInput";
-import LyricsMicrophoneInput from "./lyrics-input/LyricsMicrophoneInput";
-import LyricsGetAnswersButton from "./lyrics-input/LyricsGetAnswersButton";
-import LyricsNotFoundWarning from "./lyrics-input/LyricsNotFoundWarning";
+import LyricsInputOptions from "./LyricsInputOptions";
+import LyricsTextFieldInput from "./LyricsTextFieldInput";
+import LyricsMicrophoneInput from "./microphoneInput/LyricsMicrophoneInput";
+import LyricsGetAnswersButton from "./LyricsGetAnswersButton";
+import LyricsNotFoundWarning from "./LyricsNotFoundWarning";
 
 export default {
   computed: {

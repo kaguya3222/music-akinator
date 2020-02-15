@@ -9,7 +9,7 @@
 
 <script>
 import Name from "./GameName";
-import GameCard from "./GameCard";
+import GameCard from "./GameCard/GameCard";
 import Result from "./GameResult";
 import SessionResult from "./GameSessionResult";
 

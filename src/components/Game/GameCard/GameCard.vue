@@ -9,9 +9,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import GameLyricsInput from "./GameCardLyricsInput";
+import GameLyricsInput from "./lyrics-input/GameCardLyricsInput";
 import GameAttemptNumber from "./GameCardAttemptNumber";
-import GameAnswer from "./GameCardAnswer";
+import GameAnswer from "./answers/GameCardAnswer";
 
 export default {
   data() {

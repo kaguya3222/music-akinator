@@ -19,7 +19,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
-import validationHelpers from "../../../mixins/validationHelpers";
+import validationHelpers from "../../../../mixins/validationHelpers";
 
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
