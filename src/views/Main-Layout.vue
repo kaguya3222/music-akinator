@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import GameWindow from "../components/Game/GameWindow";
+import GameWindow from "../components/Game/Game";
 
 export default {
   data: () => ({}),

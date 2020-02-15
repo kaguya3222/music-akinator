@@ -1,48 +1,33 @@
 <template>
-  <v-card class="d-flex flex-column align-center game-card px-2 py-2 mx-10">
-    <game-attempt-number></game-attempt-number>
-    <game-lyrics-input></game-lyrics-input>
-    <game-answer></game-answer>
-  </v-card>
+  <div class="d-flex justify-center align-center">
+    <game-name v-if="step === 1"></game-name>
+    <game-card v-if="step === 2"></game-card>
+    <game-result v-if="step === 3"></game-result>
+    <session-result v-if="step === 4"></session-result>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import Name from "./GameName";
+import GameCard from "./GameCard";
+import Result from "./GameResult";
+import SessionResult from "./GameSessionResult";
 
-import GameLyricsInput from "./GameLyricsInput";
-import GameAttemptNumber from "./GameAttemptNumber";
-import GameAnswer from "./GameAnswer";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {};
   },
   computed: {
-    ...mapGetters(["attemptNumber", "answers", "answerIndex"])
-  },
-  methods: {
-    ...mapActions(["changeAnswerIndex", "resetSuggestedAnswers"])
-  },
-  mounted() {
-    this.$store.dispatch("setAnswers", { payLoad: [] });
-    this.changeAnswerIndex({ payLoad: this.attemptNumber - 1 });
-    this.resetSuggestedAnswers();
-  },
-  watch: {
-    attemptNumber() {
-      this.changeAnswerIndex({ payLoad: this.attemptNumber - 1 });
-    }
+    ...mapGetters(["step"])
   },
   components: {
-    "game-lyrics-input": GameLyricsInput,
-    "game-attempt-number": GameAttemptNumber,
-    "game-answer": GameAnswer
-  }
+    "game-name": Name,
+    "game-card": GameCard,
+    "game-result": Result,
+    "session-result": SessionResult
+  },
+  methods: {}
 };
 </script>
-
-<style lang="scss" scoped>
-.game-card {
-  min-width: 300px;
-}
-</style>
