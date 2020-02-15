@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default class API {
   constructor() {
-    this.token = "6586db1d822b505cc809c62c9c27febb";
+    this.token = "0d4477ec63c9c98f6bca4d39e31c3670";
     this.lyricsSearchEngineURL = `https://cors-anywhere.herokuapp.com/https://api.audd.io/findLyrics/`;
     this.trackIdSearchEngineURL = `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search`;
   }
