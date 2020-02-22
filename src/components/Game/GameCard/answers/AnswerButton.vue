@@ -11,14 +11,17 @@
         ><v-icon>{{ button.iconName }}</v-icon></v-btn
       >
     </template>
-    <span>Верно</span>
+    <span>{{ button.tooltipTitle }}</span>
   </v-tooltip>
 </template>
 
 <script>
 export default {
   props: {
-    button: Object
+    button: {
+      required: true,
+      type: Object
+    }
   },
   methods: {
     clickCallback() {

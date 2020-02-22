@@ -19,17 +19,20 @@ export default {
           iconName: "mdi-check",
           actionName: "endGame",
           color: "green",
-          actionParams: ["victory"]
+          actionParams: ["victory"],
+          tooltipTitle: "Верно"
         },
         {
           iconName: "mdi-play",
           actionName: "changeListenStatus",
-          color: "blue-grey"
+          color: "blue-grey",
+          tooltipTitle: "Прослушать"
         },
         {
           iconName: "mdi-close",
           actionName: "nextAttempt",
-          color: "red"
+          color: "red",
+          tooltipTitle: "Не верно"
         }
       ]
     };
