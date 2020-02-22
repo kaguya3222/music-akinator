@@ -3,7 +3,9 @@ import Vuex from "vuex";
 
 import app from "./modules/app";
 import game from "./modules/game";
-import lyricsInput from "./modules/lyricsInput";
+import answers from "./modules/answers";
+import lyrics from "./modules/lyrics/lyrics";
+import gameResult from "./modules/game-result";
 
 Vue.use(Vuex);
 
@@ -14,6 +16,8 @@ export default new Vuex.Store({
   modules: {
     app,
     game,
-    lyricsInput
+    answers,
+    lyrics,
+    gameResult
   }
 });

@@ -1,3 +1,5 @@
+import musicPlayer from "./music-player";
+
 export default {
   state: {
     result: null,
@@ -82,5 +84,8 @@ export default {
     resetSuggestedAnswers(store) {
       store.commit("mutateSuggestedAnswers", { payLoad: [] });
     }
+  },
+  modules: {
+    musicPlayer
   }
 };
