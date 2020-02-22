@@ -25,6 +25,7 @@ export default {
   },
   beforeMount() {
     this.$store.dispatch("setAnswers", { payLoad: [] });
+    this.$store.dispatch("changeIsRightAnswerSent", { payLoad: false });
     this.changeAnswerIndex({ payLoad: this.attemptNumber - 1 });
     this.resetSuggestedAnswers();
   },
