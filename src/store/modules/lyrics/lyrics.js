@@ -1,4 +1,4 @@
-import lyricsInput from "./lyricsInput";
+import lyricsInput from "./lyricsOptions";
 
 export default {
   state: {
