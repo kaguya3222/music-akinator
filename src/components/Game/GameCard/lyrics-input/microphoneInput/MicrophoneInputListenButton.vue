@@ -16,7 +16,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isSpeechLangChosen", "lyricsInputType"])
+    ...mapGetters(["speechLang", "isSpeechLangChosen", "lyricsInputType"])
   },
   methods: {
     listenMicro() {
