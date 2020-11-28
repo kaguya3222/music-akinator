@@ -1,5 +1,5 @@
 <template>
-  <v-card class="d-flex flex-column align-center game-card px-2 py-2 mx-10">
+  <v-card class="d-flex flex-column align-center game-card px-3 py-3 mx-10">
     <game-attempt-number></game-attempt-number>
     <game-lyrics-input></game-lyrics-input>
     <game-answer></game-answer>
